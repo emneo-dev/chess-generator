@@ -61,7 +61,7 @@ def main() -> int:
     if sys.argv[1] == "-h" or sys.argv[1] == "--help":
         print("Look at the readme >:(")
         return 84
-    for _ in range(int(sys.argv[1])):
+    for i in range(int(sys.argv[1])):
         board = [[" " for x in range(8)] for y in range(8)]
         piece_amount_white, piece_amount_black = random.randint(0, 15), random.randint(0, 15)
         place_kings(board)
@@ -72,6 +72,8 @@ def main() -> int:
         check = "c" if b.is_check() else "."
         checkmate = "C" if b.is_checkmate() else "."
         print(f"{augh[:-8]} {stalemate}{check}{checkmate}")
+        if ((i + 1) % 50_000 == 0):
+            print(f"Generated {i + 1} positions", file=sys.stderr)
     return 0
 
 if __name__ == "__main__":
