@@ -43,7 +43,8 @@ def fen_from_board(brd):
         if n != 0:
             fen += str(n)
         fen += "/" if fen.count("/") < 7 else ""
-    fen += " w - - 0 1\n"
+    chosen_side = random.choice(["w", "b"])
+    fen += f" {chosen_side} - - 0 1"
     return fen
 
 def place_kings(brd):
@@ -55,13 +56,23 @@ def place_kings(brd):
             break
 
 def main() -> int:
-    for _ in range(1000000):
+    if len(sys.argv) != 2:
+        return 84
+    if sys.argv[1] == "-h" or sys.argv[1] == "--help":
+        print("Look at the readme >:(")
+        return 84
+    for _ in range(int(sys.argv[1])):
         board = [[" " for x in range(8)] for y in range(8)]
         piece_amount_white, piece_amount_black = random.randint(0, 15), random.randint(0, 15)
         place_kings(board)
         populate_board(board, piece_amount_white, piece_amount_black)
-        b = chess.Board(fen_from_board(board))
-        print(b.fen())
+        augh = fen_from_board(board)
+        b = chess.Board(augh)
+        stalemate = "s" if b.is_stalemate() else "."
+        check = "c" if b.is_check() else "."
+        checkmate = "C" if b.is_checkmate() else "."
+        print(f"{augh[:-8]} {stalemate}{check}{checkmate}")
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main())
